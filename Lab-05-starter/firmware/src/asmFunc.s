@@ -68,10 +68,6 @@ asmFunc:
     /* save the caller's registers, as required by the ARM calling convention */
     push {r4-r11,LR}
  
-.if 0
-    /* profs test code. */
-    mov r0,r0
-.endif
     
     /** note to profs: asmFunc.s solution is in Canvas at:
      *    Canvas Files->
