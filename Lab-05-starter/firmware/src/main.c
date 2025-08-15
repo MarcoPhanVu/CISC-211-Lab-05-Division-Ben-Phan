@@ -171,20 +171,18 @@ static int testResult(int testNum,
     char *addrCheck = "OOPS";
     // static char *s2 = "OOPS";
     // static bool firstTime = true;
-    uint32_t expectedR0 = 0;
+    uint32_t expectedR0 = (uint32_t)&quotient;
     uint32_t myErr = 0;
     uint32_t myDiv = 0;
     uint32_t myMod = 0;
     if ((tc[testNum][0] == 0) || (tc[testNum][1] == 0))
     {
         myErr = 1;
-        expectedR0 = (uint32_t)&quotient;
     }
     else
     {
         myDiv = tc[testNum][0] / tc[testNum][1];
         myMod = tc[testNum][0] % tc[testNum][1];
-        expectedR0 = myDiv;
     }
 
     // Check we_have_a_problem
@@ -199,35 +197,17 @@ static int testResult(int testNum,
         errCheck = fail;
     }
 
-    if(myErr == 1) // for error case, check if addr was returned
+    // Check that returned value was set to quotient's address
+    if(expectedR0 == r0returnedValue)
     {
-        // Check return of addr in r0
-        if((uintptr_t)&quotient == (uintptr_t)r0returnedValue)
-        {
-            *passCount += 1;
-            addrCheck = pass;
-        }
-        else
-        {
-            *failCount += 1;
-            addrCheck = fail;
-        }        
+        *passCount += 1;
+        addrCheck = pass;
     }
-    else // there was no error, check that return value contained the quotient
+    else
     {
-        // Check that returned value was set to the quotient value
-        if(expectedR0 == r0returnedValue)
-        {
-            *passCount += 1;
-            addrCheck = pass;
-        }
-        else
-        {
-            *failCount += 1;
-            addrCheck = fail;
-        }        
-        
-    }
+        *failCount += 1;
+        addrCheck = fail;
+    }        
 
     // Check mem value of dividend
     if(dividend == tc[testNum][0])
