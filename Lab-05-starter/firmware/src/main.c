@@ -399,6 +399,7 @@ int main ( void )
                     "========= %s: ALL TESTS COMPLETE, Post-test Idle Cycle Number: %ld\r\n"
                     "Summary of tests: %ld of %ld tests passed\r\n"
                     "Final score for test cases: %ld of %ld points\r\n"
+                    "FINI!!!!!\r\n"
                     "\r\n",
                     nameStrPtr,
                     idleCount, 
