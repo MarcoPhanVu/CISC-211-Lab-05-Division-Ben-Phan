@@ -123,6 +123,7 @@ static void printGlobalAddresses(void)
 {
     // build the string to be sent out over the serial lines
     snprintf((char*)uartTxBuffer, MAX_PRINT_LEN,
+            "========= START_TESTS: %s\r\n"
             "========= GLOBAL VARIABLES MEMORY ADDRESS LIST\r\n"
             "global variable \"dividend\" stored at address:          0x%" PRIXPTR "\r\n"
             "global variable \"divisor\" stored at address:           0x%" PRIXPTR "\r\n"
@@ -131,6 +132,7 @@ static void printGlobalAddresses(void)
             "global variable \"we_have_a_problem\" stored at address: 0x%" PRIXPTR "\r\n"
             "========= END -- GLOBAL VARIABLES MEMORY ADDRESS LIST\r\n"
             "\r\n",
+            nameStrPtr,
             (uintptr_t)(&dividend), 
             (uintptr_t)(&divisor), 
             (uintptr_t)(&quotient), 
@@ -387,6 +389,8 @@ int main ( void )
         uint32_t idleCount = 1;
         uint32_t totalTests = totalPassCount + totalFailCount;
         bool firstTime = true;
+        // Only send FINI the first time
+        char *finiText = "FINI!!!!!\r\n";
         while(true)      // post-test forever loop
         {
             isRTCExpired = false;
@@ -399,12 +403,13 @@ int main ( void )
                     "========= %s: ALL TESTS COMPLETE, Post-test Idle Cycle Number: %ld\r\n"
                     "Summary of tests: %ld of %ld tests passed\r\n"
                     "Final score for test cases: %ld of %ld points\r\n"
-                    "FINI!!!!!\r\n"
+                    "%s"
                     "\r\n",
                     nameStrPtr,
                     idleCount, 
                     totalPassCount, totalTests,
-                    pointsScored, numPointsMax); 
+                    pointsScored, numPointsMax,
+                    finiText); 
 
 #if USING_HW 
             DMAC_ChannelTransfer(DMAC_CHANNEL_0, uartTxBuffer, \
@@ -424,6 +429,7 @@ int main ( void )
             // slow down the blink rate after the tests have been executed
             if (firstTime == true)
             {
+                finiText = "";
                 firstTime = false; // only execute this section once
                 RTC_Timer32Compare0Set(PERIOD_4S); // set blink period to 4sec
                 RTC_Timer32CounterSet(0); // reset timer to start at 0
