@@ -25,6 +25,11 @@ nameStrPtr: .word nameStr   /* Assign the mem loc of nameStr to nameStrPtr */
  
 /* define and initialize global variables that C can access */
 
+/* create a data section called lab5data and give it a fixed starting
+ * address. This way everyone's labs report the same address.
+ */
+.section lab5data,data,address(0x20000800)
+ 
 .global dividend,divisor,quotient,mod,we_have_a_problem
 .type dividend,%gnu_unique_object
 .type divisor,%gnu_unique_object
