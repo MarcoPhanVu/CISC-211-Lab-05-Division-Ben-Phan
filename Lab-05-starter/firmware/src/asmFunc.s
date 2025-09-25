@@ -23,9 +23,12 @@ nameStr: .asciz "Inigo Montoya"
 .type nameStrPtr,%gnu_unique_object
 nameStrPtr: .word nameStr   /* Assign the mem loc of nameStr to nameStrPtr */
  
-/* define and initialize global variables that C can access */
-
+/* define a section for the lab variables at a fixed location.
+ * This ensures the answers won't vary based on SW version or
+ * other unrelated changes */
 .section lab5data,data,address(0x20000800)
+
+/* define and initialize global variables that C can access */
 
 .global dividend,divisor,quotient,mod,we_have_a_problem
 .type dividend,%gnu_unique_object
